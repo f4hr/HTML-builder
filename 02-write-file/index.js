@@ -28,7 +28,7 @@ function exitHandler() {
   console.log('\nGoodbye!');
   reader.close();
   writer.close();
-};
+}
 
 function writeHandler(input) {
   if (input === 'exit') {
