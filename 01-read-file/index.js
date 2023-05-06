@@ -2,10 +2,13 @@ const path = require('node:path');
 const { createReadStream } = require('node:fs');
 const { stdout } = require('node:process');
 
-const filePath = path.join(__dirname, './text.txt');
-const handleError = (err) => console.error(err.message);
+const FILE_PATH = path.join(__dirname, 'text.txt');
 
-createReadStream(filePath, { encoding: 'utf-8' })
+createReadStream(FILE_PATH, { encoding: 'utf-8' })
   .on('error', handleError)
   .pipe(stdout)
   .on('error', handleError);
+
+function handleError(err) {
+  console.error(err.message);
+}
