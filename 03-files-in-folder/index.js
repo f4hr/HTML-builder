@@ -1,14 +1,14 @@
 const path = require('node:path');
 const { readdir, stat } = require('node:fs/promises');
 
-const FOLDER_NAME = 'secret-folder';
+const DIR_NAME = 'secret-folder';
 
-function init() {
-  readdir(path.join(__dirname, `./${FOLDER_NAME}`), { withFileTypes: true })
-    .then(printFiles)
+function filesInFolder(folderName = DIR_NAME) {
+  readdir(path.join(__dirname, folderName), { withFileTypes: true })
+    .then((content) => printFiles(folderName, content))
     .catch((err) => console.log(err.message));
 }
-init();
+filesInFolder();
 
 function getFileStat(file) {
   return new Promise((resolve, reject) => {
@@ -21,10 +21,10 @@ function getFileStat(file) {
   });
 }
 
-function printFiles(folderContent) {
+function printFiles(folderName, folderContent) {
   const filePaths = folderContent
     .filter((file) => file.isFile())
-    .map((file) => path.join(__dirname, FOLDER_NAME, file.name));
+    .map((file) => path.join(__dirname, folderName, file.name));
 
   Promise.all(filePaths.map(getFileStat)).then((stats) => {
     stats.forEach((fileStat) => console.log(formatStat(fileStat)));
@@ -48,3 +48,7 @@ function formatBytes(bytes, decimals = 2) {
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
+
+module.exports = {
+  filesInFolder,
+};
